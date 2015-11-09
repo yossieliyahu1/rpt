@@ -1,0 +1,31 @@
+{
+  "name": "yuvals",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.14.1",
+    "browser-sync": "^2.9.7",
+    "browserify": "^11.2.0",
+    "ejs": "^2.3.4",
+    "express": "^4.13.3",
+    "guid": "0.0.12",
+    "gulp": "^3.9.0",
+    "gulp-live-server": "0.0.28",
+    "gulp-sourcemaps": "^1.6.0",
+    "jquery": "^2.1.4",
+    "mongoose": "^4.1.10",
+    "multer": "^1.1.0",
+    "react": "^0.13.3",
+    "react-router": "^0.13.4",
+    "reactify": "^1.1.1",
+    "uuid": "^2.0.1",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0"
+  }
+}

@@ -1,0 +1,18 @@
+html {
+	color: darkslategray;
+	background-color: #fffefd;
+}
+
+
+
+
+
+/******************************************* UserDetails *******************************************/
+
+#user-details form {
+	margin-top:100px;
+}
+
+#user-details .input-top-margin {
+	margin-top:20px;
+}
