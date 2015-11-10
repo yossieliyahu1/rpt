@@ -2,7 +2,7 @@
 "use strict";
 
 var uuid = require('uuid');
-
+var request = require("request");
 
 function RPT(req, res, RPTModel) {
 
@@ -149,6 +149,25 @@ module.exports = function (app, RPTModel) {
 	})
 	.post(function (req, res) {
 		new RPT(req, res, RPTModel).post();
+	});
+
+	app.route('/admin/feeds').get(function (req, res) {
+
+		request.get('http://pref.com4ad.com/data/feeds.js', function (error, response, body) {
+			if (!error && response.statusCode == 200) {
+				res.send(body);
+			}
+		});
+
+	});
+
+	app.route('/admin/ranks').get(function (req, res) {
+
+		request.get('http://pref.com4ad.com/data/ranks.js', function (error, response, body) {
+			if (!error && response.statusCode == 200) {
+				res.send(body);
+			}
+		});
 	});
 
 }

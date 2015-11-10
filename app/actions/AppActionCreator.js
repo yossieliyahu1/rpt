@@ -17,5 +17,12 @@ module.exports = {
     		payload:item,
     		type:"report-details:set"
     	})
+    },
+
+    ping: function () {
+    	dispatcher.dispatch({
+    		payload: null,
+    		type: "qa:ping"
+    	})
     }
 }

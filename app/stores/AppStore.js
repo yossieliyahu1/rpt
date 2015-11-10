@@ -14,7 +14,7 @@ function AppStore(){
 
     	data: []
 	};
-    
+
     var listeners = [];
 
     function getApp() {
@@ -37,6 +37,7 @@ function AppStore(){
     	});
     }
 
+    
     function setData(data) {
     	helper.post("admin/rpt/", data).then(function (data) {
     		app.data = data;
@@ -49,8 +50,8 @@ function AppStore(){
     }
     
     function triggerListeners(){
-		listeners.forEach(function(listener){
-			listener(app);
+    	listeners.forEach(function (listener) {
+    		listener(app);
 		})
 	};
     
@@ -71,7 +72,7 @@ function AppStore(){
     return {
     	getData: getData,
     	setData: setData,
-		app : app,
+    	app: app,
         onChange : onChange
     }
 
