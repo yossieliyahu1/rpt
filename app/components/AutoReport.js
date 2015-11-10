@@ -24,9 +24,9 @@ module.exports = {
 
 	run: function () {
 
-	},
+	}// ,
 
 
 
-	this.run();
+	// this.run();
 }

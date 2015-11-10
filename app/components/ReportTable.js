@@ -1,6 +1,10 @@
 
 "use strict";
 
+
+// https://datatables.net/examples/data_sources/js_array.html
+
+
 var React = require('react/addons');
 var helper = require('./../helpers/RestHelper.js');
 
@@ -39,8 +43,7 @@ module.exports = React.createClass({
 			</div>
             <div className="row">
 						<div className="col-md-12">
-			
-							<h1>All Users</h1>
+							<hr />
 							 <div className="table-responsive">
 								<table className="table table-striped table-bordered table-hover">
 										<thead>
@@ -56,7 +59,7 @@ module.exports = React.createClass({
 										<tbody>
 											{
                     							this.state.app.data.map(function(row, index){
-                    								return (<tr><td>{row._id}</td><td>{row.type}</td><td>{row.country}</td><td>{row.meta}</td><td>{row.results}</td><td>{row.count}</td></tr>)
+                    								return (<tr><td>{row._id}</td><td>{row.type}</td><td>{row.country}</td><td>{JSON.stringify(row.meta)}</td><td>{JSON.stringify(row.results)}</td><td>{row.count}</td></tr>)
 												})                       
 											}	
 										</tbody>

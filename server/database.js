@@ -5,7 +5,7 @@ var mongoose = require('mongoose');
 
 // step 2 - connect to the database
 // mongoose.connect('mongodb://localhost/[the name of the database]'
-mongoose.connect('mongodb://localhost/reports');
+mongoose.connect('mongodb://localhost/reports'); // mongo-vertical-report-1.doronaviguy.cont.tutum.io:32773
 
 var db = mongoose.connection;
 

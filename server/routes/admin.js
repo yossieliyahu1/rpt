@@ -3,9 +3,24 @@
 
 var uuid = require('uuid');
 
-module.exports = function (app, RPTModel) {
 
-	function find(filter, callback) {
+function RPT(req, res, RPTModel) {
+
+
+	this.find = function (filter, callback) {
+
+		/*
+var query = Model.find({});
+
+query.where('field', 5);
+query.limit(5);
+query.skip(100);
+
+query.exec(function (err, docs) {
+  // called when the `query.complete` or `query.error` are called
+  // internally
+});
+		*/
 
 		RPTModel.find(filter, function (error, model) {
 
@@ -19,9 +34,9 @@ module.exports = function (app, RPTModel) {
 				callback(null, model);
 			}
 		});
-	}
+	};
 
-	app.route('/admin/rpt').get(function (req, res) {
+	this.get = function () {
 
 		console.log("admin/rpt route");
 		var filter = {};
@@ -34,10 +49,19 @@ module.exports = function (app, RPTModel) {
 		}
 
 		if (req.query.results) {
-			filter.results = req.query.results;
+			filter["results.code"] = Number(req.query.results);
 		}
 
-		find(filter, function (error, model) {
+		if (req.query.feed) {
+			filter["meta.feed"] = req.query.feed;
+		}
+
+		if (req.query.prdct) {
+			filter["meta.prdct"] = req.query.prdct;
+		}
+
+
+		this.find(filter, function (error, model) {
 
 			if (error || !model) {
 				res.jsonp({ "err": (error || "no doc") });
@@ -46,18 +70,36 @@ module.exports = function (app, RPTModel) {
 				res.jsonp(model);
 			}
 		});
-	})
-	.post(function (req, res) {
+	};
+
+	this.post = function () {
 
 		var filter = {
-			type: req.body.type,
-			country: req.body.country,
-			meta: req.body.meta,
-			results: req.body.results
+			type: req.body.type ? Number(req.body.type) : 0,
+			country: req.body.country || "NA"
 		}
 
-		find(filter, function (error, model) {
+		var meta = "";
+		if(req.body.meta){
+			meta = JSON.parse(req.body.meta);
+			filter["meta.feed"] = meta.feed;
+			filter["meta.cntry"] = meta.cntry;
+			filter["meta.ctgry"] = meta.ctgry;
+			filter["meta.prdct"] = meta.prdct;
+		}
+
+		var results = "";
+		if(req.body.results){
+			results = JSON.parse(req.body.results);
+			filter["results.status"] = results.status;
+			filter["results.code"] = results.code;
+		}
+
+		console.log("FLTR - " + JSON.stringify(filter));
+
+		this.find(filter, function (error, model) {
 			if (error) {
+				console.log(error);
 				res.jsonp({ "err": (error || "no doc") });
 			}
 			else if (model) {
@@ -65,25 +107,48 @@ module.exports = function (app, RPTModel) {
 				model[0].save(function (error) {
 					if (error) {
 						console.log(error);
+						res.jsonp({ "err": (error || "no doc") });
+					}
+					else {
+						console.log("record updated");
+						res.jsonp({ "status": "ok" });
 					}
 				});
 			}
 			else {
-				filter._id = uuid.v1();
-				filter.count = 1;
-				var rpt = new RPTModel(filter);
+				var obj = {
+					_id: uuid.v1(),
+					type: filter.type,
+					country: filter.country,
+					meta: meta,
+					results : results,
+					count: 1
+				};
+
+				var rpt = new RPTModel(obj);
 				rpt.save(function (error) {
 					if (error) {
 						console.log(error);
 						res.jsonp({ "err": (error || "no doc") });
 					}
 					else {
-						res.jsonp({ "status" : "ok"});
+						console.log("new record");
+						res.jsonp({ "status": "ok" });
 					}
 				});
 			}
 		});
+	}
+}
 
+
+module.exports = function (app, RPTModel) {
+
+	app.route('/admin/rpt').get(function (req, res) {
+		new RPT(req, res, RPTModel).get();
+	})
+	.post(function (req, res) {
+		new RPT(req, res, RPTModel).post();
 	});
 
 }

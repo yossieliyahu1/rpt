@@ -13,6 +13,7 @@ module.exports = React.createClass({
 			country : "",
 			type : "",
 			feed : "",
+			prdct : "",
 			results : ""
 		}	
 	},
@@ -31,12 +32,12 @@ module.exports = React.createClass({
     render:function(){
     	return (
 			<div id="user-details" className="row">
-				<div className="col-md-offset-2 col-md-8">
+				<div className="col-md-offset-1 col-md-8">
 					<form onSubmit={this.processRequest}>
 
 						<div className="row input-top-margin">
 							<div className="col-md-5">
-								<input type="text" name="type" className="form-control" placeholder="Report Type (1 - for Request, 2 - for Response)" value={this.state.type} onChange={this.handleInputChange} />
+								<input type="text" name="type" className="form-control" placeholder="Report Type (1 - Request, 2 - Response)" value={this.state.type} onChange={this.handleInputChange} />
 							</div>
 						</div>
 
@@ -48,7 +49,19 @@ module.exports = React.createClass({
 
 						<div className="row">
 							<div className="col-md-5">
-								<input type="text" name="results" className="form-control" placeholder="Results (0-500, 1-error, 2-502, 3-503, 4-404, 5-ok)" value={this.state.results} onChange={this.handleInputChange} />
+								<input type="text" name="results" className="form-control" placeholder="Result code (200, " value={this.state.results} onChange={this.handleInputChange} />
+							</div>
+						</div>
+
+						<div className="row">
+							<div className="col-md-5">
+								<input type="text" name="feed" className="form-control" placeholder="Feed (becm, shpzl, " value={this.state.feed} onChange={this.handleInputChange} />
+							</div>
+						</div>
+
+						<div className="row">
+							<div className="col-md-5">
+								<input type="text" name="prdct" className="form-control" placeholder="Product" value={this.state.prdct} onChange={this.handleInputChange} />
 							</div>
 						</div>
 						
