@@ -5,7 +5,7 @@ var mongoose = require('mongoose');
 
 // step 2 - connect to the database
 // mongoose.connect('mongodb://localhost/[the name of the database]'
-mongoose.connect('mongodb://localhost/reports');
+mongoose.connect('mongodb://204.145.74.4:27017/reports');
 
 var db = mongoose.connection;
 
