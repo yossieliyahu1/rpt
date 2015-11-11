@@ -59,7 +59,11 @@ function QAStore(){
 	function getNextUrl() {
 
 		if (currentQA.feedIdx < 0) {
-			return "qa is done."
+			currentQA = {
+				feedIdx: 0,
+				countryIdx: 0,
+				stIdx: 0
+			}
 		}
 
 		var feed = data.feeds[currentQA.feedIdx];

@@ -31,7 +31,7 @@ module.exports = React.createClass({
 
 		setInterval(function (){
 			action.ping();
-		}, 5000);
+		}, 1000);
 	},
 
     render:function(){
