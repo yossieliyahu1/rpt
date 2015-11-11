@@ -22,6 +22,7 @@
     "mongoose": "^4.1.10",
     "multer": "^1.1.0",
     "react": "^0.13.3",
+    "react-data-components": "^0.5.0",
     "react-router": "^0.13.4",
     "reactify": "^1.1.1",
     "request": "^2.65.0",

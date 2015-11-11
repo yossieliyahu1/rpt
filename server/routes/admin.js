@@ -7,21 +7,29 @@ var request = require("request");
 function RPT(req, res, RPTModel) {
 
 
-	this.find = function (filter, callback) {
+	this.find = function (filter, idx, callback) {
+
+		var query = RPTModel.find(filter);
+
+		query.limit(1000);
+		if (idx) {
+			query.skip(idx.from);
+		}
+
+		query.exec(function (error, model) {
+
+			if (error) {
+				callback({ "err": (error || "no doc") }, null);
+			}
+			else if (!model || model.length == 0) {
+				callback(null, null);
+			}
+			else {
+				callback(null, model);
+			}
+		});
 
 		/*
-var query = Model.find({});
-
-query.where('field', 5);
-query.limit(5);
-query.skip(100);
-
-query.exec(function (err, docs) {
-  // called when the `query.complete` or `query.error` are called
-  // internally
-});
-		*/
-
 		RPTModel.find(filter, function (error, model) {
 
 			if (error) {
@@ -34,6 +42,7 @@ query.exec(function (err, docs) {
 				callback(null, model);
 			}
 		});
+		*/
 	};
 
 	this.get = function () {
@@ -60,8 +69,16 @@ query.exec(function (err, docs) {
 			filter["meta.prdct"] = req.query.prdct;
 		}
 
+		if (req.query.date) {
+			filter["date"] = { $gt: req.query.date.from, $lt: req.query.date.to }
+		}
 
-		this.find(filter, function (error, model) {
+		var idx = {
+			from : req.params.from || 0,
+			to : req.params.to || 100
+		}
+
+		this.find(filter, idx, function (error, model) {
 
 			if (error || !model) {
 				res.jsonp({ "err": (error || "no doc") });
@@ -97,7 +114,7 @@ query.exec(function (err, docs) {
 
 		console.log("FLTR - " + JSON.stringify(filter));
 
-		this.find(filter, function (error, model) {
+		this.find(filter, null, function (error, model) {
 			if (error) {
 				console.log(error);
 				res.jsonp({ "err": (error || "no doc") });
@@ -144,7 +161,7 @@ query.exec(function (err, docs) {
 
 module.exports = function (app, RPTModel) {
 
-	app.route('/admin/rpt').get(function (req, res) {
+	app.route('/admin/rpt/:from?/:to?').get(function (req, res) {
 		new RPT(req, res, RPTModel).get();
 	})
 	.post(function (req, res) {

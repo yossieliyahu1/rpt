@@ -42,34 +42,79 @@ function QAStore(){
     	});
     }
 
-    function getNextUrl(){
-    	return "https://pref.com4ad.com/offers/https?cntry=us&prdct=coms001&st=xbox&ctgry=games&subid=1&n=10&ip=&callback=window.ctx__.srv.rslt";
+    var sts = ["xbox", "ipad"];
+
+    var log = {
+    	from: "",
+    	to: "",
+		msg:""
+    }
+
+    var currentQA = {
+		feedIdx : 0,
+		countryIdx : 0,
+		stIdx : 0 
+	}
+
+	function getNextUrl() {
+
+		if (currentQA.feedIdx < 0) {
+			return "qa is done."
+		}
+
+		var feed = data.feeds[currentQA.feedIdx];
+		var country = feed.coverage.cntry.values[currentQA.countryIdx];
+		var st = sts[currentQA.stIdx];
+
+		if (++currentQA.stIdx == sts.length) {
+			currentQA.stIdx = 0;
+			if (++currentQA.countryIdx == feed.coverage.cntry.values.length) {
+				currentQA.countryIdx = 0;
+				// goto the next feed
+				if (++currentQA.feedIdx == data.feeds.length) {
+					currentQA.feedIdx = -1;
+				}
+			}
+		}
+
+		log.msg += "Request [" + feed.name + "][" + country + "][" + st + "] ...  ";
+		return "http://pref.com4ad.com/offers/" + feed + "?cntry=" + country + "&prdct=coms001&st=" + st + "&ctgry=mobile&subid=1&n=10&callback=window.ctx__.srv.rslt";
     }
 
     function ping() {
+
+    	log = {
+    		from: "",
+    		to: "",
+    		msg: ""
+    	}
 
     	window.ctx__ = {
     		srv: {
     			rslt: function (rslts) {
     				if (!rslts) {
-    					data.logs.push("data is null");
+    					log.msg += "data is null! ";
     				}
     				else if (rslts.length == 0) {
-    					data.logs.push("data is empty");
+    					log.msg += "data is empty! ";
     				}
     				else {
-    					data.logs.push(rslts[0].meta.feed + "--" + rslts.length);
+    					log.msg += rslts.length + " Results ... ";
     				}
     				triggerListeners();
     			}
     		}
     	};
 
+    	log.from = new Date().getTime();
     	$.ajax({
     		url: getNextUrl(),
     		dataType: 'jsonp',
+    		contentType: "application/json",
     		complete: function (jqXHR, textStatus) {
-    			data.logs.push("done with status " + textStatus + "--" + jqXHR.status);
+    			log.to = new Date().getTime();
+    			log.msg += "Done with [" + jqXHR.status + "] In " + (log.to - log.from);
+    			data.logs.push(log.msg);
     			triggerListeners();
     		}
     	});

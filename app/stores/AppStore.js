@@ -25,18 +25,27 @@ function AppStore(){
     	app = {
 
     		pageMin: 0,
-    		pageMax: 20,
+    		pageMax: 1000,
 
     		data: []
     	};
     	triggerListeners();
 
-    	helper.get("admin/rpt/", filter).then(function (data) {
+    	helper.get("admin/rpt/" + app.pageMin + "/" + app.pageMax, filter).then(function (data) {
     		app.data = data;
     		triggerListeners();
     	});
     }
 
+    function getNextPage(filter) {
+    	app.pageMin = app.pageMax;
+    	app.pageMax += 1000;
+
+    	helper.get("admin/rpt/" + app.pageMin + "/" + app.pageMax, filter).then(function (data) {
+    		app.data = data;
+    		triggerListeners();
+    	});
+    }
     
     function setData(data) {
     	helper.post("admin/rpt/", data).then(function (data) {
