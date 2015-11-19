@@ -262,7 +262,7 @@ module.exports = React.createClass({displayName: "exports",
 
 		setInterval(function (){
 			action.ping();
-		}, 1000);
+		}, 4000);
 	},
 
     render:function(){
